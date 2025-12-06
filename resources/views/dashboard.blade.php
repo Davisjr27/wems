@@ -1,35 +1,73 @@
-<!-- resources/views/student/dashboard.blade.php -->
-<x-app-layout>
-    <div class="py-8 px-6">
-        <h1 class="text-3xl font-bold mb-6">Student Dashboard</h1>
+@extends('layouts.app')
 
-        <!-- Student Info Card -->
-        <div class="bg-white shadow rounded-xl p-6 mb-6">
-            <h2 class="text-xl font-semibold mb-4">Your Profile</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <p class="text-sm text-gray-600">Name:</p>
-                    <p class="font-medium">{{ auth()->user()->name }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-600">Email:</p>
-                    <p class="font-medium">{{ auth()->user()->email }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-600">Student Number:</p>
-                    <p class="font-medium">{{ auth()->user()->student_number ?? 'Not set' }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-600">Department:</p>
-                    <p class="font-medium">{{ auth()->user()->department ?? 'Not set' }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-600">Phone:</p>
-                    <p class="font-medium">{{ auth()->user()->phone ?? 'Not set' }}</p>
-                </div>
-            </div>
-        </div>
+@section('content')
+<div class="max-w-4xl mx-auto mt-10">
 
-
+    {{-- Dashboard Header --}}
+    <div class="bg-white shadow p-6 rounded-lg mb-6">
+        <h2 class="text-2xl font-bold mb-2">Student Dashboard</h2>
+        <p class="text-gray-600">Welcome, {{ Auth::user()->name }}</p>
     </div>
-</x-app-layout>
+
+    {{-- Passport Display --}}
+    <div class="bg-white shadow p-6 rounded-lg mb-6">
+        <h3 class="text-xl font-semibold mb-4">Your Passport Photo</h3>
+
+        @if(Auth::user()->passport)
+            <img src="{{ asset('storage/passports/' . Auth::user()->passport) }}"
+                 class="w-32 h-32 rounded border object-cover">
+        @else
+            <p class="text-gray-500 text-sm">No passport uploaded yet.</p>
+        @endif
+    </div>
+
+    {{-- Weekly Logbook Form --}}
+    <div class="bg-white shadow p-6 rounded-lg">
+        <h3 class="text-xl font-bold mb-4">Weekly Logbook Entry</h3>
+
+        <form action="{{ route('student.logbook.store') }}"
+              method="POST"
+              enctype="multipart/form-data">
+            @csrf
+
+            {{-- Week Number --}}
+            <div class="mb-4">
+                <label class="block mb-1 font-medium">Week Number</label>
+                <input type="number" name="week_number"
+                       class="w-full border p-2 rounded"
+                       placeholder="e.g. 1" required>
+            </div>
+
+            {{-- Weekly Summary --}}
+            <div class="mb-4">
+                <label class="block mb-1 font-medium">Weekly Summary</label>
+                <textarea name="summary" rows="4"
+                          class="w-full border p-2 rounded"
+                          placeholder="Describe what you did this week..."
+                          required></textarea>
+            </div>
+
+            {{-- Upload Stamped Document --}}
+            <div class="mb-4">
+                <label class="block mb-1 font-medium">
+                    Upload Company Stamped/Signature Page (Scanned)
+                </label>
+                <input type="file" name="stamp_file"
+                       class="w-full border p-2 rounded bg-white"
+                       accept="image/*,application/pdf"
+                       required>
+                <p class="text-xs text-gray-500 mt-1">
+                    Accepted: JPG, PNG, PDF (Max 2MB)
+                </p>
+            </div>
+
+            {{-- Submit Button --}}
+            <button type="submit"
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Submit Logbook Entry
+            </button>
+        </form>
+    </div>
+
+</div>
+@endsection

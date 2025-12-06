@@ -26,7 +26,7 @@ class RegistrationTest extends TestCase
             'student_number' => '123456',
             'department' => 'Computer Science',
             'phone' => '1234567890',
-            'photo' => null, // or provide a test file if needed
+            'photo' => \Illuminate\Http\UploadedFile::fake()->image('photo.jpg'),
         ]);
 
         $this->assertAuthenticated();
