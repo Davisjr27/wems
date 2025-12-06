@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Auth;
 
 class StudentLogbookController extends Controller
 {
+    // Show form (optional — you already embedded in dashboard)
+    public function create()
+    {
+        return view('student.logbook.create');
+    }
+
+    // Store logbook entry
     public function store(Request $request)
     {
         $request->validate([
@@ -16,7 +23,7 @@ class StudentLogbookController extends Controller
             'stamp_file' => 'required|file|mimes:jpg,png,jpeg,pdf|max:2048',
         ]);
 
-        $fileName = time().'.'.$request->stamp_file->extension();
+        $fileName = time() . '.' . $request->stamp_file->extension();
         $request->stamp_file->storeAs('logbook_stamps', $fileName, 'public');
 
         StudentLogbook::create([
@@ -26,6 +33,15 @@ class StudentLogbookController extends Controller
             'stamp_file' => $fileName,
         ]);
 
-        return back()->with('success', 'Logbook entry uploaded successfully!');
+        return back()->with('success', 'Logbook entry submitted successfully!');
+    }
+    // List all logbooks
+    public function index()
+    {
+        $entries = StudentLogbook::where('student_id', Auth::id())
+                    ->orderBy('week_number', 'asc')
+                    ->get();
+
+        return view('student.logbook.index', compact('entries'));
     }
 }

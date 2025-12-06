@@ -3,10 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentLogbookController;
+use App\Http\Controllers\StudentLogbookPDFController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -29,6 +30,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/student/logbook', [StudentLogbookController::class, 'index'])
         ->name('student.logbook.index');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/logbook/pdf', [StudentLogbookPDFController::class, 'generate'])
+        ->name('student.logbook.pdf');
 });
 
 require __DIR__.'/auth.php';
