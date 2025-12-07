@@ -24,16 +24,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
 
-    // Student logbook
-    Route::get('/student/logbook/create', [StudentLogbookController::class, 'create'])
-        ->name('student.logbook.create');
-
-    Route::post('/student/logbook/store', [StudentLogbookController::class, 'store'])
-        ->name('student.logbook.store');
-
-    Route::get('/student/logbook', [StudentLogbookController::class, 'index'])
-        ->name('student.logbook.index');
-
+    // Student logbook PDF generation
     Route::get('/student/logbook/pdf', [StudentLogbookPDFController::class, 'generate'])
         ->name('student.logbook.pdf');
 
@@ -47,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    // student logbook routes
     Route::get('/student/logbook', [LogbookController::class, 'index'])->name('student.logbook.index');
     Route::get('/student/logbook/create', [LogbookController::class, 'create'])->name('student.logbook.create');
     Route::post('/student/logbook', [LogbookController::class, 'store'])->name('student.logbook.store');

@@ -1,31 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    {{-- // Flash Messages --}}
-    @if (session('success'))
-        <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg border border-green-300">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="mb-4 p-4 bg-red-100 text-red-800 rounded-lg border border-red-300">
-            {{ session('error') }}
-        </div>
-    @endif
-
-    @if (session('warning'))
-        <div class="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded-lg border border-yellow-300">
-            {{ session('warning') }}
-        </div>
-    @endif
-
-    @if (session('info'))
-        <div class="mb-4 p-4 bg-blue-100 text-blue-800 rounded-lg border border-blue-300">
-            {{ session('info') }}
-        </div>
-    @endif
-
     <div class="max-w-7xl mx-auto py-10 px-4">
 
         {{-- HEADER --}}
@@ -41,11 +16,11 @@
             <div class="md:col-span-1 space-y-6">
 
                 {{-- Passport --}}
-                <div x-data="{ open: false }" class="bg-white shadow p-6 rounded-xl text-center">
+                <div class="bg-white shadow p-6 rounded-xl text-center">
                     <h3 class="text-lg font-semibold mb-3">Passport Photo</h3>
 
-                    @if (Auth::user()->passport)
-                        <img src="{{ asset('storage/passports/' . Auth::user()->passport) }}"
+                    @if (Auth::user()->photo)
+                        <img src="{{ asset('storage/passports/' . Auth::user()->photo) }}"
                             class="w-36 h-36 mx-auto rounded-lg border shadow object-cover">
                     @else
                         <div class="w-36 h-36 mx-auto bg-gray-100 flex items-center justify-center rounded-lg border">
@@ -53,41 +28,9 @@
                         </div>
                     @endif
 
-                    <button @click="open = true" class="mt-3 inline-block text-blue-600 text-sm underline">
-                        Change Photo
-                    </button>
-
-                    <!-- Modal -->
-                    <div x-show="open" x-transition
-                        class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-
-                        <div @click.away="open = false" class="bg-white p-6 rounded-xl shadow-xl w-96">
-
-                            <h2 class="text-lg font-semibold mb-4">Upload New Passport</h2>
-
-                            <form action="{{ route('student.passport.update') }}" method="POST"
-                                enctype="multipart/form-data">
-                                @csrf
-
-                                <input type="file" name="passport" accept="image/*" required
-                                    class="w-full border rounded-lg p-2 mb-4">
-
-                                <div class="flex justify-end gap-2">
-                                    <button type="button" @click="open = false"
-                                        class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg">
-                                        Cancel
-                                    </button>
-
-                                    <button type="submit"
-                                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                                        Upload
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                    </div>
                 </div>
+
+
 
 
                 {{-- Shortcuts --}}
@@ -117,40 +60,93 @@
             <div class="md:col-span-2">
 
                 {{-- FORM CARD --}}
-                <div class="bg-white shadow p-8 rounded-xl mb-8">
-                    <h3 class="text-2xl font-semibold mb-6">Submit Weekly Logbook</h3>
+                <div x-data="logbookForm()" class="max-w-3xl mx-auto bg-white shadow-lg rounded-2xl p-8 mb-12">
+                    <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">Submit Weekly Logbook</h2>
 
-                    <form action="{{ route('student.logbook.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('student.logbook.store') }}" method="POST" enctype="multipart/form-data"
+                        class="space-y-6">
                         @csrf
 
                         {{-- Week Number --}}
-                        <div class="mb-6">
-                            <label class="block mb-2 font-medium">Week Number</label>
-                            <input type="number" name="week_number"
-                                class="w-full border-gray-300 p-3 rounded-lg shadow-sm focus:ring focus:ring-blue-200"
+                        <div>
+                            <label for="week" class="block text-gray-700 font-medium mb-2">Week Number</label>
+                            <input type="number" name="week" id="week" min="1"
+                                class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 shadow-sm"
                                 placeholder="Enter week number" required>
                         </div>
 
-                        {{-- Weekly Summary --}}
-                        <div class="mb-6">
-                            <label class="block mb-2 font-medium">Weekly Summary</label>
-                            <textarea name="summary" rows="5"
-                                class="w-full border-gray-300 p-3 rounded-lg shadow-sm focus:ring focus:ring-blue-200"
-                                placeholder="Describe your weekly activities..." required></textarea>
+                        {{-- Start & End Dates --}}
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="start_date" class="block text-gray-700 font-medium mb-2">Start Date</label>
+                                <input type="date" name="start_date" id="start_date"
+                                    class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 shadow-sm"
+                                    required>
+                            </div>
+                            <div>
+                                <label for="end_date" class="block text-gray-700 font-medium mb-2">End Date</label>
+                                <input type="date" name="end_date" id="end_date"
+                                    class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 shadow-sm"
+                                    required>
+                            </div>
                         </div>
 
-                        {{-- Upload Stamp/Signature --}}
-                        <div class="mb-6">
-                            <label class="block mb-2 font-medium">Upload Stamped Page</label>
-                            <input type="file" name="stamp_file"
-                                class="w-full border-gray-300 p-3 rounded-lg bg-white shadow-sm"
-                                accept="image/*,application/pdf" required>
-                            <p class="text-gray-500 text-sm mt-1">Accepted: JPG, PNG, PDF • Max: 2MB</p>
+                        {{-- Weekly Activities --}}
+                        <div>
+                            <label for="activities" class="block text-gray-700 font-medium mb-2">Weekly Summary /
+                                Activities</label>
+                            <textarea name="activities" id="activities" rows="6"
+                                class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 shadow-sm"
+                                placeholder="Describe what you did this week..." required></textarea>
                         </div>
 
-                        <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg shadow">
-                            Submit Weekly Entry
-                        </button>
+                        {{-- Optional Work Image --}}
+                        <div x-data="{ fileName: '', fileUrl: '' }">
+                            <label for="work_image" class="block text-gray-700 font-medium mb-2">Optional Work Image</label>
+                            <input type="file" name="work_image" id="work_image" @change="previewFile($event)"
+                                class="w-full border border-gray-300 rounded-xl p-3 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm"
+                                accept="image/*">
+                            <p class="text-gray-500 text-sm mt-1">Optional: Upload a screenshot or photo of your work. JPG,
+                                PNG max 2MB.
+                            </p>
+
+                            <!-- File preview -->
+                            <template x-if="fileUrl">
+                                <div class="mt-4">
+                                    <img :src="fileUrl" alt="Work Image Preview"
+                                        class="w-48 h-48 object-contain border rounded-lg">
+                                    <p class="text-gray-700 mt-2 font-medium" x-text="fileName"></p>
+                                </div>
+                            </template>
+                        </div>
+
+
+                        {{-- Upload Company Stamp --}}
+                        <div x-data="{ fileName: '', fileUrl: '' }">
+                            <label for="company_stamp" class="block text-gray-700 font-medium mb-2">Upload Company
+                                Stamp</label>
+                            <input type="file" name="company_stamp" id="company_stamp" @change="previewFile($event)"
+                                class="w-full border border-gray-300 rounded-xl p-3 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm"
+                                accept="image/*" required>
+                            <p class="text-gray-500 text-sm mt-1">Accepted formats: JPG, PNG • Max size: 2MB</p>
+
+                            <!-- File preview -->
+                            <template x-if="fileUrl">
+                                <div class="mt-4">
+                                    <img :src="fileUrl" alt="Company Stamp Preview"
+                                        class="w-48 h-48 object-contain border rounded-lg">
+                                    <p class="text-gray-700 mt-2 font-medium" x-text="fileName"></p>
+                                </div>
+                            </template>
+                        </div>
+
+                        {{-- Submit Button --}}
+                        <div class="flex justify-end">
+                            <button type="submit"
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-xl shadow-md transition-all duration-200">
+                                Submit Logbook
+                            </button>
+                        </div>
                     </form>
                 </div>
 

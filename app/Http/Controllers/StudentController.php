@@ -20,24 +20,22 @@ class StudentController extends Controller
     public function updatePassport(Request $request)
     {
         $request->validate([
-            'passport' => 'required|image|max:2048'
+            'passport' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+        $file = $request->file('passport');
+
+        // Create a clean file name
+        $filename = 'passport_'.Auth::id().'_'.time().'.'.$file->getClientOriginalExtension();
+
+        // Store inside storage/app/public/passports
+        $file->storeAs('public/passports', $filename);
+
+        // Save filename to database (column: photo)
         $user = Auth::user();
-
-        // delete old passport
-        if ($user->passport && file_exists(storage_path('app/public/passports/' . $user->passport))) {
-            unlink(storage_path('app/public/passports/' . $user->passport));
-        }
-
-        // rename file cleanly
-        $newName = 'passport_' . $user->id . '.' . $request->passport->extension();
-
-        $request->passport->storeAs('public/passports', $newName);
-
-        $user->passport = $newName;
+        $user->photo = $filename;
         $user->save();
 
-        return back()->with('success', 'Passport updated successfully.');
+        return back()->with('success', 'Passport updated successfully!');
     }
 }

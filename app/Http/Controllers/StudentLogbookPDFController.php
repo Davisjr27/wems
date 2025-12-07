@@ -4,18 +4,16 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Http\Request;
-use App\Models\StudentLogbook;
+use App\Models\Logbook;
 use Illuminate\Support\Facades\Auth;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class StudentLogbookPDFController extends Controller
 {
     public function generate()
     {
         $student = Auth::user();
-        $logs = StudentLogbook::where('student_id', $student->id)
-                    ->orderBy('week_number', 'asc')
-                    ->get();
+        $logs = Logbook::where('user_id', $student->id)->orderBy('week_number', 'asc')->get();
 
         $officer = (object)[
             'signature' => 'officer_signature.png', // placeholder

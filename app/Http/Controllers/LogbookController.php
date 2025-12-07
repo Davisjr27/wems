@@ -23,25 +23,23 @@ class LogbookController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'week' => 'required',
+            'week' => 'required|integer',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
             'activities' => 'required|min:10',
-            'company_signature' => 'image|nullable|max:2048',
-            'company_stamp' => 'image|nullable|max:2048',
+            'company_stamp' => 'required|image|max:2048', // only one image
         ]);
 
-        $signatureName = null;
         $stampName = null;
-
-        if ($request->hasFile('company_signature')) {
-            $signatureName = 'signature_'.time().'.'.$request->company_signature->extension();
-            $request->company_signature->storeAs('public/signatures', $signatureName);
-        }
-
         if ($request->hasFile('company_stamp')) {
             $stampName = 'stamp_'.time().'.'.$request->company_stamp->extension();
             $request->company_stamp->storeAs('public/stamps', $stampName);
+        }
+
+        $workImageName = null;
+        if ($request->hasFile('work_image')) {
+            $workImageName = 'work_'.time().'.'.$request->work_image->extension();
+            $request->work_image->storeAs('public/work_images', $workImageName);
         }
 
         Logbook::create([
@@ -50,8 +48,8 @@ class LogbookController extends Controller
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
             'activities' => $request->activities,
-            'company_signature' => $signatureName,
             'company_stamp' => $stampName,
+            'work_image' => $workImageName,
         ]);
 
         return redirect()->route('student.logbook.index')
