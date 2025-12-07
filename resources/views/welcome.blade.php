@@ -20,49 +20,75 @@
 <body class="antialiased text-gray-800 bg-gray-50">
 
     <!-- NAV -->
-    <header class="fixed w-full z-30 bg-white/90 backdrop-blur-sm shadow-sm">
-        <div class="max-w-6xl mx-auto px-6">
+    <header class="fixed w-full z-40 bg-white/90 backdrop-blur-lg shadow">
+        <div class="max-w-7xl mx-auto px-6">
             <div class="flex items-center justify-between h-16">
-                <a href="#home" class="flex items-center gap-3">
-                    <img src="{{ asset('images/your-logo.png') }}" alt="WEMS Logo" class="w-32">
-                    <span class="font-semibold text-lg">WEMS</span>
-                </a>
 
-                <nav class="hidden md:flex items-center gap-6">
-                    <a href="#home" class="hover:text-blue-600">Home</a>
-                    <a href="#about" class="hover:text-blue-600">About</a>
-                    <a href="#how" class="hover:text-blue-600">How it Works</a>
-                    <a href="#features" class="hover:text-blue-600">Features</a>
-                    <a href="#privacy" class="hover:text-blue-600">Privacy</a>
-                    <a href="#contact" class="hover:text-blue-600">Contact</a>
+                <!-- Logo + Title -->
+                <div class="flex items-center gap-3">
+                    <img src="{{ asset('images/wemslogo.png') }}" class="h-10 w-auto" alt="WEMS Logo">
+
+                    {{-- <span class="font-semibold text-xl">
+                        SIWES Portal
+                    </span> --}}
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex items-center gap-6 font-medium">
+                    <a href="#home" class="hover:text-blue-600 transition">Home</a>
+                    <a href="#about" class="hover:text-blue-600 transition">About</a>
+                    <a href="#how" class="hover:text-blue-600 transition">How It Works</a>
+                    <a href="#features" class="hover:text-blue-600 transition">Features</a>
+                    <a href="#privacy" class="hover:text-blue-600 transition">Privacy</a>
+                    <a href="#contact" class="hover:text-blue-600 transition">Contact</a>
                 </nav>
 
+                <!-- Auth Buttons -->
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('login') }}"
-                        class="px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50">Login</a>
-                    <a href="{{ route('register') }}"
-                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Get Started</a>
+                    @auth
+                        <a href="{{ url('/dashboard') }}"
+                           class="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 shadow transition">
+                            Dashboard
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}"
+                           class="px-4 py-2 border border-blue-600 text-blue-600 rounded-xl hover:bg-blue-50 transition">
+                            Login
+                        </a>
+                        <a href="{{ route('register') }}"
+                           class="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 shadow transition">
+                            Get Started
+                        </a>
+                    @endauth
 
-                    <!-- mobile menu button -->
-                    <button id="navToggle" class="md:hidden ml-2 p-2 rounded-md hover:bg-gray-100">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <!-- Mobile toggle -->
+                    <button id="navToggle" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16" />
+                                  d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
                 </div>
+
             </div>
         </div>
 
-        <!-- Mobile nav -->
-        <div id="mobileNav" class="md:hidden hidden border-t">
-            <div class="px-6 py-3 flex flex-col gap-2">
-                <a href="#home" class="py-2">Home</a>
-                <a href="#about" class="py-2">About</a>
-                <a href="#how" class="py-2">How it Works</a>
-                <a href="#features" class="py-2">Features</a>
-                <a href="#privacy" class="py-2">Privacy</a>
-                <a href="#contact" class="py-2">Contact</a>
+        <!-- Mobile Menu -->
+        <div id="mobileNav" class="hidden md:hidden border-t bg-white/95 backdrop-blur-lg">
+            <div class="px-6 py-3 flex flex-col gap-3 font-medium">
+                <a href="#home" class="py-1">Home</a>
+                <a href="#about" class="py-1">About</a>
+                <a href="#how" class="py-1">How It Works</a>
+                <a href="#features" class="py-1">Features</a>
+                <a href="#privacy" class="py-1">Privacy</a>
+                <a href="#contact" class="py-1">Contact</a>
+
+                @auth
+                    <a href="{{ url('/dashboard') }}" class="py-1 text-blue-600 font-semibold">Dashboard</a>
+                @else
+                    <a href="{{ route('login') }}" class="py-1">Login</a>
+                    <a href="{{ route('register') }}" class="py-1">Get Started</a>
+                @endauth
             </div>
         </div>
     </header>
@@ -81,7 +107,7 @@
                         upload company endorsements once, and generate an approved, professionally stamped logbook PDF.
                     </p>
 
-                    <div class="mt-8 flex flex-wrap gap-3">
+                    {{-- <div class="mt-8 flex flex-wrap gap-3">
                         <a href="{{ route('register') }}"
                             class="px-6 py-3 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700">
                             Get Started
@@ -91,9 +117,9 @@
                             Login
                         </a>
                         <a href="#how" class="px-6 py-3 text-gray-700 rounded-md hover:bg-gray-100">How it works</a>
-                    </div>
+                    </div> --}}
 
-                    <div class="mt-8 text-sm text-gray-500">
+                    <div class="px-6 py-6 mt-8 bg-blue-600 text-sm text-white rounded-md shadow">
                         <span class="font-medium">For institutions:</span> reduces paperwork, centralizes records, and
                         improves verification.
                     </div>

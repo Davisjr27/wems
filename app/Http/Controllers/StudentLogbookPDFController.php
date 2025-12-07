@@ -23,7 +23,7 @@ class StudentLogbookPDFController extends Controller
             'name' => 'SIWES Officer'
         ];
 
-        $pdf = PDF::loadView('logbook.pdf', [
+        $pdf = PDF::loadView('student.logbook.pdf', [
             'student' => $student,
             'logs' => $logs,
             'officer' => $officer

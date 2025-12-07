@@ -1,6 +1,31 @@
 @extends('layouts.app')
 
 @section('content')
+    {{-- // Flash Messages --}}
+    @if (session('success'))
+        <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg border border-green-300">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="mb-4 p-4 bg-red-100 text-red-800 rounded-lg border border-red-300">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    @if (session('warning'))
+        <div class="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded-lg border border-yellow-300">
+            {{ session('warning') }}
+        </div>
+    @endif
+
+    @if (session('info'))
+        <div class="mb-4 p-4 bg-blue-100 text-blue-800 rounded-lg border border-blue-300">
+            {{ session('info') }}
+        </div>
+    @endif
+
     <div class="max-w-7xl mx-auto py-10 px-4">
 
         {{-- HEADER --}}
@@ -16,7 +41,7 @@
             <div class="md:col-span-1 space-y-6">
 
                 {{-- Passport --}}
-                <div class="bg-white shadow p-6 rounded-xl text-center">
+                <div x-data="{ open: false }" class="bg-white shadow p-6 rounded-xl text-center">
                     <h3 class="text-lg font-semibold mb-3">Passport Photo</h3>
 
                     @if (Auth::user()->passport)
@@ -28,10 +53,42 @@
                         </div>
                     @endif
 
-                    <a href="#" class="mt-3 inline-block text-blue-600 text-sm underline">
+                    <button @click="open = true" class="mt-3 inline-block text-blue-600 text-sm underline">
                         Change Photo
-                    </a>
+                    </button>
+
+                    <!-- Modal -->
+                    <div x-show="open" x-transition
+                        class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+
+                        <div @click.away="open = false" class="bg-white p-6 rounded-xl shadow-xl w-96">
+
+                            <h2 class="text-lg font-semibold mb-4">Upload New Passport</h2>
+
+                            <form action="{{ route('student.passport.update') }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+
+                                <input type="file" name="passport" accept="image/*" required
+                                    class="w-full border rounded-lg p-2 mb-4">
+
+                                <div class="flex justify-end gap-2">
+                                    <button type="button" @click="open = false"
+                                        class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg">
+                                        Cancel
+                                    </button>
+
+                                    <button type="submit"
+                                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                        Upload
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
                 </div>
+
 
                 {{-- Shortcuts --}}
                 <div class="bg-white shadow p-6 rounded-xl">

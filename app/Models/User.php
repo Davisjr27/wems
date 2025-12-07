@@ -49,4 +49,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
         ];
     }
+
+    public function logbooks()
+    {
+        return $this->hasMany(Logbook::class);
+    }
 }
