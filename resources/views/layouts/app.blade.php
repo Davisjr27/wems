@@ -51,26 +51,41 @@
         @endisset
 
         @if (session('success'))
-            <div
+            <div id="alert-success"
                 class="fixed top-5 right-5 z-50 bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slide-in">
                 <span>{{ session('success') }}</span>
                 <button onclick="this.parentElement.remove()" class="text-white font-bold">&times;</button>
             </div>
+
+            <script>
+                setTimeout(() => {
+                    let el = document.getElementById('alert-success');
+                    if (el) el.remove();
+                }, 3000); // 3 seconds
+            </script>
         @endif
 
         @if (session('error'))
-            <div
+            <div id="alert-error"
                 class="fixed top-5 right-5 z-50 bg-red-600 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slide-in">
                 <span>{{ session('error') }}</span>
                 <button onclick="this.parentElement.remove()" class="text-white font-bold">&times;</button>
             </div>
+
+            <script>
+                setTimeout(() => {
+                    let el = document.getElementById('alert-error');
+                    if (el) el.remove();
+                }, 3000); // 3 seconds
+            </script>
         @endif
+
 
 
         <!-- Page Content -->
         <main>
             {{-- {{ $slot }} --}}
-            @yield('content')
+            {{-- @yield('content') --}}
         </main>
     </div>
 </body>

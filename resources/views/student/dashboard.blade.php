@@ -27,8 +27,8 @@
                             <span class="text-gray-400">No Photo</span>
                         </div>
                     @endif
-
                 </div>
+
 
 
 
