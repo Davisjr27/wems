@@ -12,7 +12,7 @@
             <h3 class="text-lg font-semibold mb-3">Passport Photo</h3>
 
             @if (Auth::user()->photo)
-                <img src="{{ asset('storage/passports/' . Auth::user()->photo) }}"
+                <img src="{{ asset('storage/' . Auth::user()->photo) }}"
                      class="w-40 h-40 rounded-lg border object-cover shadow">
             @else
                 <div class="w-40 h-40 bg-gray-100 rounded-lg border flex items-center justify-center">

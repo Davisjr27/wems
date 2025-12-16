@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('student_number')->nullable();
             $table->string('department')->nullable();
             $table->string('phone')->nullable();
-            $table->string('photo'); // store filename/path
+            $table->string('photo')->nullable(false); // store filename/path
             $table->rememberToken();
             $table->timestamps();
         });
@@ -47,8 +47,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('users');
     }
 };
