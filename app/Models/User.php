@@ -54,4 +54,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(Logbook::class);
     }
+
+    public function submissions()
+    {
+        return $this->hasMany(LogbookSubmission::class, 'student_id');
+    }
+
+    // Student summary
+    public function logbookSummary(){
+        return $this->hasOne(LogbookSummary::class, 'student_id');
+    }
+
+    // officer review summary
+    public function reviewedSummaries()
+    {
+        return $this->hasMany(LogbookSummary::class, 'officer_id');
+    }
 }

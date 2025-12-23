@@ -46,10 +46,25 @@
                 <!-- Auth Buttons -->
                 <div class="flex items-center gap-3">
                     @auth
-                        <a href="{{ url('/dashboard') }}"
-                           class="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 shadow transition">
-                            Dashboard
-                        </a>
+                        @if (Auth::user()->role === 'admin')
+                            <a href="{{ route('admin.dashboard') }}"
+                               class="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 shadow transition">
+                                Dashboard
+                            </a>
+
+                        @elseif(Auth::user()->role === 'officer')
+                            <a href="{{ route('officer.dashboard') }}"
+                               class="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 shadow transition">
+                                Dashboard
+                            </a>
+
+                        @else
+                            <a href="{{ route('student.dashboard') }}"
+                               class="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 shadow transition">
+                                Dashboard
+                            </a>
+
+                        @endif
                     @else
                         <a href="{{ route('login') }}"
                            class="px-4 py-2 border border-blue-600 text-blue-600 rounded-xl hover:bg-blue-50 transition">

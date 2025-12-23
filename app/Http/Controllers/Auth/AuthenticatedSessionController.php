@@ -19,6 +19,16 @@ class AuthenticatedSessionController extends Controller
         return view('auth.login');
     }
 
+    protected function authenticated(Request $request, $user)
+    {
+        return match ($user->role) {
+            'student' => redirect()->route('student.dashboard'),
+            'officer' => redirect()->route('officer.dashboard'),
+            'admin' => redirect()->route('admin.dashboard'),
+            default => redirect('/'),
+        };
+    }
+
     /**
      * Handle an incoming authentication request.
      */
@@ -28,7 +38,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // return redirect()->intended(route('dashboard', absolute: false));
+        return $this->authenticated($request, $request->user());
     }
 
     /**

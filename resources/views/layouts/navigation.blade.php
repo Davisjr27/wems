@@ -128,7 +128,8 @@
         hover:bg-indigo-50 hover:text-indigo-700 hover:shadow-sm transition
         {{ request()->routeIs('welcome') ? 'bg-indigo-100 text-indigo-700 shadow-sm' : '' }}">
 
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" stroke="currentColor"
+                    stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M2.25 12l9.5-9.5 9.5 9.5M4.5 10.5v9.75A1.75 1.75 0 006.25 22h11.5A1.75 1.75 0 0019.5 20.25V10.5" />
                 </svg>
@@ -136,43 +137,89 @@
             </a>
 
             <!-- Dashboard -->
-            <a href="{{ route('dashboard') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 font-medium
-        hover:bg-indigo-50 hover:text-indigo-700 hover:shadow-sm transition
-        {{ request()->routeIs('dashboard') ? 'bg-indigo-100 text-indigo-700 shadow-sm' : '' }}">
 
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M3.75 3.75h6.5v6.5h-6.5zM13.75 3.75h6.5v6.5h-6.5zM3.75 13.75h6.5v6.5h-6.5zM13.75 13.75h6.5v6.5h-6.5z" />
-                </svg>
+            @if (Auth::user()->role === 'admin')
+                <a href="{{ route('admin.dashboard') }}"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 font-medium
+                    hover:bg-indigo-50 hover:text-indigo-700 hover:shadow-sm transition
+                    {{ request()->routeIs('admin.dashboard') ? 'bg-indigo-100 text-indigo-700 shadow-sm' : '' }}">
 
-                Dashboard
-            </a>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" stroke="currentColor"
+                        stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3.75 3.75h6.5v6.5h-6.5zM13.75 3.75h6.5v6.5h-6.5zM3.75 13.75h6.5v6.5h-6.5zM13.75 13.75h6.5v6.5h-6.5z" />
+                    </svg>
+                    Dashboard
+                </a>
+            @elseif (Auth::user()->role === 'officer')
+                <a href="{{ route('officer.dashboard') }}"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 font-medium
+                    hover:bg-indigo-50 hover:text-indigo-700 hover:shadow-sm transition
+                    {{ request()->routeIs('officer.dashboard') ? 'bg-indigo-100 text-indigo-700 shadow-sm' : '' }}">
 
-            <!-- Profile -->
-            <a href="{{ route('student.profile') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 font-medium
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" stroke="currentColor"
+                        stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3.75 3.75h6.5v6.5h-6.5zM13.75 3.75h6.5v6.5h-6.5zM3.75 13.75h6.5v6.5h-6.5zM13.75 13.75h6.5v6.5h-6.5z" />
+                    </svg>
+                    Dashboard
+                </a>
+
+                {{-- // profile link for officer --}}
+                <a href="{{ route('officer.profile') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 font-medium
+                         hover:bg-indigo-50 hover:text-indigo-700 hover:shadow-sm transition">
+
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path
+                                d="M5.121 17.804A4 4 0 018 16h8a4 4 0 012.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        Profile
+                    </a>
+            @else
+                    <a href="{{ route('student.dashboard') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 font-medium
+                        hover:bg-indigo-50 hover:text-indigo-700 hover:shadow-sm transition
+                        {{ request()->routeIs('student.dashboard') ? 'bg-indigo-100 text-indigo-700 shadow-sm' : '' }}">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" stroke="currentColor"
+                            stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3.75 3.75h6.5v6.5h-6.5zM13.75 3.75h6.5v6.5h-6.5zM3.75 13.75h6.5v6.5h-6.5zM13.75 13.75h6.5v6.5h-6.5z" />
+                        </svg>
+
+
+                        Dashboard
+                    </a>
+
+
+                    <!-- Profile -->
+                    <a href="{{ route('student.profile') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 font-medium
         hover:bg-indigo-50 hover:text-indigo-700 hover:shadow-sm transition">
 
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path d="M5.121 17.804A4 4 0 018 16h8a4 4 0 012.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                Profile
-            </a>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path
+                                d="M5.121 17.804A4 4 0 018 16h8a4 4 0 012.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        Profile
+                    </a>
+            @endif
 
-            <!-- Logout -->
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button
-                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 font-medium
+                    <!-- Logout -->
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button
+                            class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 font-medium
             hover:bg-red-50 hover:text-red-700 hover:shadow-sm transition">
 
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 11-4 0V7a2 2 0 114 0v1" />
-                    </svg>
-                    Log Out
-                </button>
-            </form>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 11-4 0V7a2 2 0 114 0v1" />
+                            </svg>
+                            Log Out
+                        </button>
+                    </form>
 
         </nav>
 

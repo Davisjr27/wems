@@ -15,8 +15,7 @@ class Logbook extends Model
         'start_date',
         'end_date',
         'activities',
-        'company_stamp', // required
-        'work_image',    // optional
+        'work_image',
     ];
 
     public function user()
